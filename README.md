@@ -91,7 +91,7 @@ orders = [
 
 ---
 
-## 🛠 Tecnologías
+## Tecnologías
 
 - **Frontend**: React + Axios
 - **Backend**: Node.js (Express)
