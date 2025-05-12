@@ -1,0 +1,43 @@
+
+version: '3.8'
+services:
+  db_auth:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth_db
+    ports:
+      - "5433:5432"
+
+  db_orders:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: orders_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./orders-db-init:/docker-entrypoint-initdb.d
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db_auth
+
+  orders-service:
+    build: ./orders-service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db_orders
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - orders-service
